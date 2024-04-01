@@ -1,13 +1,22 @@
 package br.com.guilherme.model;
 
-import java.io.Serializable;
+import jakarta.persistence.*;
 
+import java.io.Serializable;
+import java.util.Objects;
+
+@Entity
+@Table(name = "person")
 public class Person implements Serializable {
     private static final long serialVersionUID = 1L;
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(nullable = false, length = 80)
     private String name;
-    private String Adress;
+    @Column(nullable = false)
+    private String adress;
+    @Column(nullable = false, length = 11)
     private String cpf;
 
     public Person() {
@@ -30,11 +39,11 @@ public class Person implements Serializable {
     }
 
     public String getAdress() {
-        return Adress;
+        return adress;
     }
 
     public void setAdress(String adress) {
-        Adress = adress;
+        this.adress = adress;
     }
 
     public String getCpf() {
@@ -43,5 +52,18 @@ public class Person implements Serializable {
 
     public void setCpf(String cpf) {
         this.cpf = cpf;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Person person = (Person) o;
+        return Objects.equals(id, person.id) && Objects.equals(name, person.name) && Objects.equals(adress, person.adress) && Objects.equals(cpf, person.cpf);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, adress, cpf);
     }
 }

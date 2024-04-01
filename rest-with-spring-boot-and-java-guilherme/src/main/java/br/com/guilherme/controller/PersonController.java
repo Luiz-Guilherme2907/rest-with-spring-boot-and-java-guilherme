@@ -15,12 +15,12 @@ public class PersonController {
     private PersonServices services;
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Person findById(@PathVariable(value = "id")String id){
+    public Person findById(@PathVariable(value = "id")Long id){
             return services.findById(id);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    public void delete(@PathVariable(value = "id")String id){
+    public void delete(@PathVariable(value = "id")Long id){
            services.delete(id);
     }
     @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
