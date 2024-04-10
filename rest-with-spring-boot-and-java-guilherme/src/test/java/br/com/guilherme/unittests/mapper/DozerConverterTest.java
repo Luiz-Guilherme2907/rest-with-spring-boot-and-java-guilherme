@@ -29,6 +29,14 @@ public class DozerConverterTest {
         assertEquals("CPF Test0", output.getCpf());
         assertEquals("Addres Test0", output.getAdress());
     }
+    @Test
+    public void parseEntityToVOTestComent() {
+        PersonVO output = DozerMapper.parseObject(inputObject.mockEntity(), PersonVO.class);
+        assertEquals(Long.valueOf(0L), output.getId());
+        assertEquals("Name Test0", output.getName());
+        assertEquals("CPF Test0", output.getCpf());
+        assertEquals("Addres Test0", output.getAdress());
+    }
 
     @Test
     public void parseEntityListToVOListTest() {
