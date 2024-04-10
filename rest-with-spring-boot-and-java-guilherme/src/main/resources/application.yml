@@ -8,7 +8,7 @@ spring:
     open-in-view: false
     hibernate:
       ddl-auto: update
-    #properties:
+    # properties:
      # hibernate:
       #  dialect: org.hibernate.dialect.MySQLDialect
     show-sql: false

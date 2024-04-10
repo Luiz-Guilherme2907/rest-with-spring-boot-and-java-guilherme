@@ -1,6 +1,7 @@
 package br.com.guilherme.controller;
 
-import br.com.guilherme.model.Person;
+
+import br.com.guilherme.data.vo.v1.PersonVO;
 import br.com.guilherme.services.PersonServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -16,22 +17,22 @@ public class PersonController {
     private PersonServices services;
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Person create(@RequestBody Person person){
+    public PersonVO create(@RequestBody PersonVO person){
         return services.create(person);
     }
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Person findById(@PathVariable(value = "id")Long id){
+    public PersonVO findById(@PathVariable(value = "id")Long id){
             return services.findById(id);
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<Person> findAll(){
+    public List<PersonVO> findAll(){
         return services.findAll();
     }
 
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Person update(@RequestBody Person person){
+    public PersonVO update(@RequestBody PersonVO person){
         return services.update(person);
     }
 
