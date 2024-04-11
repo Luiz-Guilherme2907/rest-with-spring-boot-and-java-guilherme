@@ -1,8 +1,10 @@
 package br.com.guilherme.services;
 
 import br.com.guilherme.data.vo.v1.PersonVO;
+import br.com.guilherme.data.vo.v2.PersonVOV2;
 import br.com.guilherme.exception.ResourceNotFoundException;
 import br.com.guilherme.mapper.DozerMapper;
+import br.com.guilherme.mapper.custom.PersonMapper;
 import br.com.guilherme.model.Person;
 import br.com.guilherme.repositories.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,12 +22,21 @@ public class PersonServices {
 
     @Autowired
     PersonRepository repository;
+    @Autowired
+    PersonMapper mapper;
 
     //Mock de pessoa, para simular uma busca no banco de dados
     public PersonVO create(PersonVO person) {
         logger.info("Creating One person");
         var entity = DozerMapper.parseObject(person, Person.class);
         var vo = DozerMapper.parseObject(repository.save(entity), PersonVO.class);
+        return vo;
+
+    }
+    public PersonVOV2 createV2(PersonVOV2 person) {
+        logger.info("Creating One person");
+        var entity = mapper.convertVOToEntity(person);
+        var vo = mapper.convertEntityToVO(repository.save(entity));
         return vo;
 
     }
