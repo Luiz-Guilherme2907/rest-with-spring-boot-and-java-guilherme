@@ -7,13 +7,13 @@ import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
 
-@JsonPropertyOrder({"id", "Full Name", "adress", "cpf"})
+@JsonPropertyOrder({"id", "fullName", "adress", "cpf"})
 public class PersonVO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private Long id;
 
-    @JsonProperty("Full Name")
+    @JsonProperty("fullName")
     private String name;
     private String adress;
     private String cpf;
