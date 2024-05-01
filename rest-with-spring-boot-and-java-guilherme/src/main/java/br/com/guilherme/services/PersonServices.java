@@ -3,6 +3,7 @@ package br.com.guilherme.services;
 import br.com.guilherme.controller.PersonController;
 import br.com.guilherme.data.vo.v1.PersonVO;
 import br.com.guilherme.data.vo.v2.PersonVOV2;
+import br.com.guilherme.exception.RequiredObjectIsNullException;
 import br.com.guilherme.exception.ResourceNotFoundException;
 import br.com.guilherme.mapper.DozerMapper;
 import br.com.guilherme.mapper.custom.PersonMapper;
@@ -28,8 +29,8 @@ public class PersonServices {
     @Autowired
     PersonMapper mapper;
 
-    //Mock de pessoa, para simular uma busca no banco de dados
     public PersonVO create(PersonVO person) {
+        if (person == null) throw new RequiredObjectIsNullException();
         logger.info("Creating One person");
         var entity = DozerMapper.parseObject(person, Person.class);
         var vo = DozerMapper.parseObject(repository.save(entity), PersonVO.class);
@@ -46,6 +47,8 @@ public class PersonServices {
     }
 
     public PersonVO update(PersonVO person) {
+        if (person == null) throw new RequiredObjectIsNullException();
+
         logger.info("Creating One person");
         var entity = repository.findById(person.getKey()).orElseThrow(() -> new ResourceNotFoundException("No records found for this ID!"));
 
