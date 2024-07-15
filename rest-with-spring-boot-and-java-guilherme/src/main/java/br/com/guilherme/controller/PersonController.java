@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+
 @RestController
 @RequestMapping("api/person")
 @Tag(name = "People", description = "Endpoints for managing people")
@@ -24,6 +25,7 @@ public class PersonController {
     @Autowired
     private PersonServices services;
 
+    @CrossOrigin(origins = {"http://localhost:8080", "https://guilherme.com.br"})
     @PostMapping(value = "/v1", consumes = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.APPLICATION_YML}, produces = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.APPLICATION_YML})
     @Operation(summary = "Add a person", description = "add a person by passing a JSON, YAML OR XML", tags = {"People"}, responses = {
             @ApiResponse(description = "Created", responseCode = "200", content =
@@ -44,6 +46,7 @@ public class PersonController {
         return services.createV2(person);
     }
 
+    @CrossOrigin(origins = "http://localhost:8080")
     @GetMapping(value = "/v1/{id}", produces = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.APPLICATION_YML})
     @Operation(summary = "Find a person", description = "Find a person by passing a JSON, YAML OR XML", tags = {"People"}, responses = {
             @ApiResponse(description = "Sucess", responseCode = "200", content =
