@@ -40,27 +40,83 @@ public class PersonControllerJsonTest extends AbstractIntegrationTest {
 	public void testCreate() throws IOException {
 		mockPerson();
 
-		specification = new RequestSpecBuilder().addHeader(TestsConfigs.HEADER_PARAM_ORIGIN, "https://guilherme.com.br").setBasePath("/api/person/v1").setPort(TestsConfigs.SERVER_PORT).addFilter(new RequestLoggingFilter(LogDetail.ALL)).addFilter(new ResponseLoggingFilter(LogDetail.ALL)).build();
+		specification = new RequestSpecBuilder().addHeader(TestsConfigs.HEADER_PARAM_ORIGIN, TestsConfigs.ORIGIN_GUILHERME).setBasePath("/api/person/v1").setPort(TestsConfigs.SERVER_PORT).addFilter(new RequestLoggingFilter(LogDetail.ALL)).addFilter(new ResponseLoggingFilter(LogDetail.ALL)).build();
 		var content = given().spec(specification).contentType(TestsConfigs.CONTENT_TYPE_JSON).body(person).when().post().then().statusCode(200).extract().body().asString();
 
-		PersonVO createdPerson = objectMapper.readValue(content, PersonVO.class);
-		person = createdPerson;
+		PersonVO persistedPerson = objectMapper.readValue(content, PersonVO.class);
+		person = persistedPerson;
 
-		assertNotNull(createdPerson.getId());
-		assertNotNull(createdPerson.getName());
-		assertNotNull(createdPerson.getCpf());
-		assertNotNull(createdPerson.getAdress());
-		assertTrue(createdPerson.getId() > 0);
+		assertNotNull(persistedPerson.getId());
+		assertNotNull(persistedPerson.getName());
+		assertNotNull(persistedPerson.getCpf());
+		assertNotNull(persistedPerson.getAdress());
+		assertTrue(persistedPerson.getId() > 0);
 
-		assertEquals("Richerd", createdPerson.getName());
-		assertEquals("Rua fernando", createdPerson.getAdress());
-		assertEquals("111111", createdPerson.getCpf());
+		assertEquals("Richerd", persistedPerson.getName());
+		assertEquals("Rua fernando", persistedPerson.getAdress());
+		assertEquals("111111", persistedPerson.getCpf());
 	}
 
 	private void mockPerson() {
 		person.setName("Richerd");
 		person.setAdress("Rua fernando");
 		person.setCpf("111111");
+	}
+	@Test
+	@Order(2)
+	public void testCreateWithWrongOrigin() throws IOException {
+		mockPerson();
+
+		specification = new RequestSpecBuilder().addHeader(TestsConfigs.HEADER_PARAM_ORIGIN, TestsConfigs.ORIGIN_NOTGUILHERME).setBasePath("/api/person/v1").setPort(TestsConfigs.SERVER_PORT).addFilter(new RequestLoggingFilter(LogDetail.ALL)).addFilter(new ResponseLoggingFilter(LogDetail.ALL)).build();
+		var content = given().spec(specification).contentType(TestsConfigs.CONTENT_TYPE_JSON).body(person).when().post().then().statusCode(403).extract().body().asString();
+
+
+		assertNotNull(content);
+
+		assertEquals("Invalid CORS request", content);
+	}
+	@Test
+	@Order(3)
+	public void testFindById() throws IOException {
+		mockPerson();
+
+		specification = new RequestSpecBuilder().addHeader(TestsConfigs.HEADER_PARAM_ORIGIN, TestsConfigs.ORIGIN_GUILHERME).setBasePath("/api/person/v1").setPort(TestsConfigs.SERVER_PORT).addFilter(new RequestLoggingFilter(LogDetail.ALL)).addFilter(new ResponseLoggingFilter(LogDetail.ALL)).build();
+		var content = given().spec(specification).contentType(TestsConfigs.CONTENT_TYPE_JSON).pathParam("id", person.getId()).when().get("{id}").then().statusCode(200).extract().body().asString();
+
+		PersonVO persistedPerson = objectMapper.readValue(content, PersonVO.class);
+		person = persistedPerson;
+
+		assertNotNull(persistedPerson.getId());
+		assertNotNull(persistedPerson.getName());
+		assertNotNull(persistedPerson.getCpf());
+		assertNotNull(persistedPerson.getAdress());
+		assertTrue(persistedPerson.getId() > 0);
+
+		assertEquals("Richerd", persistedPerson.getName());
+		assertEquals("Rua fernando", persistedPerson.getAdress());
+		assertEquals("111111", persistedPerson.getCpf());
+	}
+
+	@Test
+	@Order(4)
+	public void testFindByIdWithWrongOrigin() throws IOException {
+		mockPerson();
+
+		specification = new RequestSpecBuilder().addHeader(TestsConfigs.HEADER_PARAM_ORIGIN, TestsConfigs.ORIGIN_NOTGUILHERMEGUILHERME).setBasePath("/api/person/v1").setPort(TestsConfigs.SERVER_PORT).addFilter(new RequestLoggingFilter(LogDetail.ALL)).addFilter(new ResponseLoggingFilter(LogDetail.ALL)).build();
+		var content = given().spec(specification).contentType(TestsConfigs.CONTENT_TYPE_JSON).pathParam("id", person.getId()).when().get("{id}").then().statusCode(200).extract().body().asString();
+
+		PersonVO persistedPerson = objectMapper.readValue(content, PersonVO.class);
+		person = persistedPerson;
+
+		assertNotNull(persistedPerson.getId());
+		assertNotNull(persistedPerson.getName());
+		assertNotNull(persistedPerson.getCpf());
+		assertNotNull(persistedPerson.getAdress());
+		assertTrue(persistedPerson.getId() > 0);
+
+		assertEquals("Richerd", persistedPerson.getName());
+		assertEquals("Rua fernando", persistedPerson.getAdress());
+		assertEquals("111111", persistedPerson.getCpf());
 	}
 
 }
