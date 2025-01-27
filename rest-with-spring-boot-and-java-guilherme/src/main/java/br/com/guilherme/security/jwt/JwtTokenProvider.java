@@ -1,4 +1,4 @@
-package br.com.guilherme.securityJwt;
+package br.com.guilherme.security.jwt;
 
 import br.com.guilherme.data.vo.v1.security.TokenVO;
 import br.com.guilherme.exception.InvalidJwtAuthenticationExcaption;
@@ -27,7 +27,7 @@ public class JwtTokenProvider {
     @Value("${security.jwt.token.secret-key:secret}")
     private String secretKey = "secret";
 
-    @Value("${security.jwt.token.expire-lenght:3600000}")
+    @Value("${security.jwt.token.expire-length:3600000}")
     private long validityInMilliseconds = 3600000; //1h
 
 
